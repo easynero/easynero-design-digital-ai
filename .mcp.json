@@ -2,7 +2,7 @@
   "mcpServers": {
     "design-digital-ai": {
       "type": "http",
-      "url": "https://design-digital-ai.vercel.app/api/mcp",
+      "url": "https://design-digital-ai-nine.vercel.app/api/mcp",
       "bearerTokenEnvVar": "MCP_ACCESS_TOKEN"
     }
   }
