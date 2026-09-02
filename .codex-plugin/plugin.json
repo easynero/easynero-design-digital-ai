@@ -5,7 +5,7 @@
   "author": {
     "name": "Nero"
   },
-  "homepage": "https://design-digital-ai.vercel.app",
+  "homepage": "https://design-digital-ai-nine.vercel.app",
   "repository": "https://github.com/easynero/easynero-design-digital-ai",
   "skills": "./skills/",
   "interface": {
@@ -15,7 +15,7 @@
     "developerName": "Nero",
     "category": "Design",
     "capabilities": ["Interactive", "Write"],
-    "websiteURL": "https://design-digital-ai.vercel.app",
+    "websiteURL": "https://design-digital-ai-nine.vercel.app",
     "defaultPrompt": [
       "Crie esta imagem com Nano Banana 2.",
       "Edite esta peça preservando a referência.",
