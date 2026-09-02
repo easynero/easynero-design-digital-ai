@@ -1,6 +1,10 @@
 import { createMcpHandler, withMcpAuth } from "mcp-handler";
 import { z } from "zod";
-import { getMcpResourceUrl, getRequiredScopes, verifyMcpToken } from "@/lib/auth";
+import {
+  getMcpResourceOrigin,
+  getRequiredScopes,
+  verifyMcpToken,
+} from "@/lib/auth";
 import {
   analyzeMedia,
   generateImage,
@@ -214,7 +218,7 @@ const authenticatedHandler = withMcpAuth(
   {
     required: true,
     requiredScopes: getRequiredScopes(),
-    resourceUrl: getMcpResourceUrl(),
+    resourceUrl: getMcpResourceOrigin(),
   },
 );
 

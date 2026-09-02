@@ -32,6 +32,10 @@ export function getMcpResourceUrl() {
   return `${base}/api/mcp`;
 }
 
+export function getMcpResourceOrigin() {
+  return new URL(getMcpResourceUrl()).origin;
+}
+
 export function getAuth0Audience() {
   return process.env.AUTH0_AUDIENCE?.trim() || getMcpResourceUrl();
 }
@@ -113,4 +117,3 @@ export async function verifyMcpToken(_request: Request, bearerToken?: string): P
     return undefined;
   }
 }
-
