@@ -20,9 +20,9 @@ Plugin privado para usar ferramentas criativas do Google dentro do projeto Desig
 
 ## Servidor
 
-Produção: <https://design-digital-ai.vercel.app>
+Produção: <https://design-digital-ai-nine.vercel.app>
 
-Endpoint MCP: <https://design-digital-ai.vercel.app/api/mcp>
+Endpoint MCP: <https://design-digital-ai-nine.vercel.app/api/mcp>
 
 ### Variáveis da Vercel
 
