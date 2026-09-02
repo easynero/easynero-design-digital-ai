@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Digital AI"
+  short_description: "Ferramentas Gemini para o projeto Design Digital"
+  default_prompt: "Use o Design Digital AI para criar ou editar esta peça."

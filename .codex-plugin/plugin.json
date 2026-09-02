@@ -1,0 +1,26 @@
+{
+  "name": "design-digital-ai",
+  "version": "0.1.0",
+  "description": "Ferramentas privadas do Gemini para o projeto Design Digital.",
+  "author": {
+    "name": "Nero"
+  },
+  "homepage": "https://design-digital-ai.vercel.app",
+  "repository": "https://github.com/easynero/easynero-design-digital-ai",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Design Digital AI",
+    "shortDescription": "Crie e edite mídia com Gemini no projeto Design Digital.",
+    "longDescription": "Integra Nano Banana 2, Nano Banana Pro, Gemini Omni Flash, Veo e análise multimodal aos chats do projeto Design Digital.",
+    "developerName": "Nero",
+    "category": "Design",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://design-digital-ai.vercel.app",
+    "defaultPrompt": [
+      "Crie esta imagem com Nano Banana 2.",
+      "Edite esta peça preservando a referência.",
+      "Transforme esta imagem em vídeo."
+    ]
+  },
+  "mcpServers": "./.mcp.json"
+}
