@@ -1,6 +1,6 @@
 import { createMcpHandler, withMcpAuth } from "mcp-handler";
-import { timingSafeEqual } from "node:crypto";
 import { z } from "zod";
+import { getMcpResourceUrl, getRequiredScopes, verifyMcpToken } from "@/lib/auth";
 import {
   analyzeMedia,
   generateImage,
@@ -14,6 +14,9 @@ export const maxDuration = 300;
 
 const imageRatios = ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9", "1:8", "8:1", "1:4", "4:1"] as const;
 const mediaAnnotations = { readOnlyHint: false, destructiveHint: false, openWorldHint: true };
+const oauthSecurityMeta = {
+  securitySchemes: [{ type: "oauth2", scopes: ["creative:generate"] }],
+};
 
 function errorResult(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected generation error.";
@@ -28,6 +31,7 @@ const handler = createMcpHandler(
         title: "Generate or edit an image",
         description:
           "Generate a new image or edit supplied reference images with Nano Banana. Use balanced by default, premium for complex professional design work, and fast for inexpensive drafts. Supplying previous_interaction_id continues a conversational edit.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({
           prompt: z.string().min(3).describe("Complete visual direction or requested edit."),
           model: z.enum(["balanced", "premium", "fast"]).default("balanced"),
@@ -72,6 +76,7 @@ const handler = createMcpHandler(
         title: "Generate or edit a video",
         description:
           "Start an asynchronous video generation or conversational edit. Use conversational for most work, cinematic for Veo controls, and efficient for lower-cost iterations. Follow with get_generation_result.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({
           prompt: z.string().min(3),
           model: z.enum(["conversational", "cinematic", "efficient"]).default("conversational"),
@@ -107,6 +112,7 @@ const handler = createMcpHandler(
       {
         title: "Get generation result",
         description: "Check an asynchronous Gemini video generation and return its downloadable result when complete.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({ interaction_id: z.string().min(1) }),
         annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
       },
@@ -128,6 +134,7 @@ const handler = createMcpHandler(
       {
         title: "Analyze design media and files",
         description: "Analyze images, videos, audio, PDFs, or text files with Gemini for critique, extraction, comparison, transcription, or creative direction.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({
           prompt: z.string().min(3),
           media_urls: z.array(z.string().url()).min(1).max(12),
@@ -149,6 +156,7 @@ const handler = createMcpHandler(
       {
         title: "Generate voice audio",
         description: "Generate directed single-speaker voice audio from exact text using Gemini text-to-speech.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({
           text: z.string().min(1).max(8000),
           voice: z.string().default("Kore"),
@@ -177,6 +185,7 @@ const handler = createMcpHandler(
       {
         title: "List supported creative models",
         description: "List the model profiles exposed by Design Digital AI and explain when each profile should be used.",
+        _meta: oauthSecurityMeta,
         inputSchema: z.object({}),
         annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
       },
@@ -199,20 +208,14 @@ const handler = createMcpHandler(
   },
 );
 
-function secureCompare(received: string, expected: string) {
-  const left = Buffer.from(received);
-  const right = Buffer.from(expected);
-  return left.length === right.length && timingSafeEqual(left, right);
-}
-
 const authenticatedHandler = withMcpAuth(
   handler,
-  async (_request, bearerToken) => {
-    const expected = process.env.MCP_ACCESS_TOKEN;
-    if (!expected || !bearerToken || !secureCompare(bearerToken, expected)) return undefined;
-    return { token: bearerToken, scopes: ["creative:generate"], clientId: "design-digital-owner" };
+  verifyMcpToken,
+  {
+    required: true,
+    requiredScopes: getRequiredScopes(),
+    resourceUrl: getMcpResourceUrl(),
   },
-  { required: true, requiredScopes: ["creative:generate"] },
 );
 
 export { authenticatedHandler as GET, authenticatedHandler as POST };

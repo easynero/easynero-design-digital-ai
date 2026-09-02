@@ -9,7 +9,7 @@ Plugin privado para usar ferramentas criativas do Google dentro do projeto Desig
 - Análise de imagens, vídeos, áudios, PDFs e arquivos de texto.
 - Geração de voz com Gemini TTS.
 - Continuidade de edições por `interaction_id`.
-- Proteção do endpoint MCP por Bearer token.
+- Proteção do endpoint MCP por OAuth 2.1/Auth0, com Bearer token estático opcional para clientes diretos.
 
 ## Estrutura
 
@@ -29,11 +29,17 @@ Endpoint MCP: <https://design-digital-ai-nine.vercel.app/api/mcp>
 Copie `server/.env.example` e configure os valores apenas na Vercel:
 
 - `GEMINI_API_KEY`: chave da API Google Gemini.
-- `MCP_ACCESS_TOKEN`: token privado usado pelo cliente MCP.
+- `MCP_ACCESS_TOKEN`: token privado opcional para clientes MCP diretos/CI; não é usado pelo OAuth do ChatGPT.
 - `BLOB_READ_WRITE_TOKEN`: necessário para URLs persistentes de vídeo e áudio.
 - `PUBLIC_BASE_URL`: URL pública estável do servidor.
+- `AUTH0_DOMAIN`: domínio do tenant Auth0.
+- `AUTH0_AUDIENCE`: identificador da API criada no Auth0 (por padrão, a URL do MCP).
+- `MCP_RESOURCE_URL`: identificador canônico protegido, normalmente `https://design-digital-ai-nine.vercel.app/api/mcp`.
+- `MCP_REQUIRED_SCOPES`: permissões exigidas pelo MCP (por padrão, `creative:generate`).
 
 Nunca envie valores secretos ao GitHub.
+
+O endpoint de descoberta OAuth fica em `/.well-known/oauth-protected-resource`. Depois de alterar as configurações de autenticação, atualize a conexão do MCP no modo desenvolvedor do ChatGPT.
 
 ## Desenvolvimento
 
